@@ -1,6 +1,4 @@
-<h1 style="margin: 0 0 0.35 rem 0; line-height: 1.1;">MixFlow <img src="./docs/figs/logo_lab_lotf_noback.png" height="150" alt="MixFlow logo" style="vertical-align: -2.0em; margin-left: -2.30rem;" /></h1>
-
-<hr style="margin-top: -4.5rem; margin-bottom: 0.5rem;">
+<h1 style="margin: 0 0 0.35 rem 0; line-height: 1.1;">MixFlow</h1>
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](./LICENSE)
 [![Python](https://img.shields.io/badge/Python-3.10%2B-blue.svg)](#)
