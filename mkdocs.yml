@@ -1,0 +1,24 @@
+site_name: MixFlow
+site_description: MixFlow documentation
+repo_url: https://github.com/Lotfollahi-lab/mixflow
+repo_name: Lotfollahi-lab/mixflow
+
+theme:
+  name: material
+  features:
+    - navigation.tabs
+    - navigation.sections
+    - content.code.copy
+
+nav:
+  - Home: index.md
+  - Installation: installation.md
+  - Running: running.md
+
+plugins:
+  - search
+
+markdown_extensions:
+  - admonition
+  - toc:
+      permalink: true
