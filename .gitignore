@@ -3,7 +3,6 @@ NonGit/
 PythonPackageCache/
 Runs_/
 notebooks_private/
-data/Norman/
 data/MNIST/
 data/GeneExpression/
 weights/
