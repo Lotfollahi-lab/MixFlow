@@ -17,7 +17,7 @@ Mixture-Conditioned Flow Matching for Out-of-Distribution Generalization.
 <b>(A)</b> Vanilla CFM
 </td>
 <td align="center">
-<img src="./docs/figs/manif_ptflow_B.png" width="97.5%">
+<img src="./docs/figs/manif_ptflow_B.png" width="100%">
 <br>
 <b>(B)</b> MixFlow
 </td>
