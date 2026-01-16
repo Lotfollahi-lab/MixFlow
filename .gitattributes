@@ -1,0 +1,15 @@
+weights./* filter=lfs diff=lfs merge=lfs -text
+data/GeneExpression/raw.h5ad filter=lfs diff=lfs merge=lfs -text
+data/GeneExpression/exp10.filter.tar.gz filter=lfs diff=lfs merge=lfs -text
+data/GeneExpression/exp10.raw.tar.gz filter=lfs diff=lfs merge=lfs -text
+data/GeneExpression/mixscape_hvg_filter.h5ad filter=lfs diff=lfs merge=lfs -text
+output/GeneExpression filter=lfs diff=lfs merge=lfs -text
+*.h5ad filter=lfs diff=lfs merge=lfs -text
+*.pkl filter=lfs diff=lfs merge=lfs -text
+*.pth filter=lfs diff=lfs merge=lfs -text
+*.pt filter=lfs diff=lfs merge=lfs -text
+*.csv filter=lfs diff=lfs merge=lfs -text
+*.zip filter=lfs diff=lfs merge=lfs -text
+*.gz filter=lfs diff=lfs merge=lfs -text
+data/GenePT_gene_embedding.pickle filter=lfs diff=lfs merge=lfs -text
+data/Norman.tar.gz filter=lfs diff=lfs merge=lfs -text
