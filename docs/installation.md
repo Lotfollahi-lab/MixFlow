@@ -34,7 +34,7 @@ pip install -e .
 
 This installs MixFlow and its Python dependencies while keeping the source editable for development.
 
-## 4. Install Excact Environment
+## 4. Install Exact Environment
 
 We provide the `requirements.txt` file that can be used to recreate exactly the environment used for our benchmarks.
 
