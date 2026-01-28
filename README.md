@@ -7,7 +7,9 @@ This page shows a minimal example of how we currently run SP-FM on the **Norman*
 
 ## Norman dataset example
 
-We release Norman's data splits in `data/Norman.tar.gz`. 
+We couldn't attach the Norman dataset, due to the 50MB size limit of submission.
+You can download the Norman dataset from the reference cited in our submitted manuscript.
+In `adata.obs`, you should create a column `split` with values in `train` and `test`, which splits the dataset based on conditions to training and testing splits, to be used by SP-FM code.
 
 ### Minimal command 
 
