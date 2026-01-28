@@ -1544,9 +1544,9 @@ class PertFlow:
                 return om, gm, td, gd
             deg = DEG.get(key) or DEG.get(key.split("####", 1)[0])
             """
-            TODO:aknote:BUGBUGBUGBUGBUGBUGBUG
+            TODO:notes
             Although in my run the cell_type covariate is enabled, here `key` is a single perturbation name,
-               i.e. without the #### separator. :| 
+               i.e. without the #### separator.
             """
             if deg is None:
                 return om, gm, td, gd
@@ -1573,7 +1573,7 @@ class PertFlow:
             om, gm, td, gd = maybe_filter(om, gm, td, gd, key)
 
             """
-            TODO:aknote:BUGBUGBUGBUGBUGBUGBUG
+            TODO:note
             Although there are 50 precomputed DEGs, here `td` and `gd` are of shape [N x 2000]!
             """
             

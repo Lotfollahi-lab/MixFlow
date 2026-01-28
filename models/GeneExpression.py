@@ -124,7 +124,7 @@ class GeneExpressionNet(nn.Module):  # i.e. the flow module, v(x,t,conditions)
             input_dim=input_dim + dim_embedding + sum([dict_covarname_to_dimembedding[covarname] for covarname in dict_covarname_to_dimembedding.keys()]) + 1,  # note: +1 for 'time'.,
             hidden_dims=hidden_dims,
             output_dim=input_dim, 
-            idx_repeatadd=input_dim + 1  # aknote: +1 for not repeatedly feeding the time (intuitively, V(.,.,.) has to  smootly vary with time, i.e. not very dependant on time)
+            idx_repeatadd=input_dim + 1  # note: +1 for not repeatedly feeding the time (intuitively, V(.,.,.) has to  smootly vary with time, i.e. not very dependant on time)
         )
         # print `self.net`
         print(">>>>>>>>>>>>>>>>>>")
@@ -154,7 +154,7 @@ class GeneExpressionNet(nn.Module):  # i.e. the flow module, v(x,t,conditions)
         t = t.unsqueeze(0).view(-1, 1).expand(x.shape[0], 1)
         # print(">>>>>> t.shape = {}".format(t.shape)) [N x 1]
         return self.net(torch.cat((x, t, condition_and_perturbation), -1))
-        # TODO:aknote: for some reason I've mostly seen t appended at the end, but it shouldn't really matter.
+        # TODO:note: for some reason I've mostly seen t appended at the end, but it shouldn't really matter.
 
 class GeneExpressionGNN(torch.nn.Module):
     def __init__(self, input_dim, hidden_dim, output_dim):
@@ -207,7 +207,7 @@ class ModuleHtheta(nn.Module):
         # make internals
         self.H_theta = nn.Sequential(
             nn.Linear(dim_in, 128),
-            nn.Dropout(p=prob_dropout_Htheta),  # TODO:aknote:tune p
+            nn.Dropout(p=prob_dropout_Htheta),  # TODO:note:tune p
             nn.ReLU(),
             nn.Linear(128, dim_out)
         )
@@ -249,7 +249,7 @@ class ModuleHtheta(nn.Module):
 #         if upper_bound_additive_amount > 0:
 #             self.H_theta = nn.Sequential(
 #                 nn.Linear(dim_in, 128),
-#                 nn.Dropout(p=prob_dropout_Htheta),  # TODO:aknote:tune p
+#                 nn.Dropout(p=prob_dropout_Htheta),  # TODO:note:tune p
 #                 nn.ReLU(),
 #                 nn.Linear(128, dim_out),
 #                 type_ending_module(),  # TODO:revert, nn.Tanh(),  # beacuse of the initial normalisation, the embeddings are in [-1.0, +1.0]
@@ -373,7 +373,7 @@ class GeneExpressionFlowModel(nn.Module):
                 sum([self.embedding_layers[covarname].embedding_dim for covarname in self.embedding_layers.keys()]) + self.dim_embedding,
                 128
             )  
-            # TODO:aknote:BUGBUGBUGBUGBUGBUG: the above line presumes that the embeddings for each covariate equals 10.
+            # TODO:note: the above line presumes that the embeddings for each covariate equals 10.
             #   but..... if the embedding is fixed/frozen in adata.uns, its dimension may not be equal to 10.
             # Recall: `self.dim_embedding` is the output dim of the covariate encoder, i.e. the space to which different covars are encoded to and are averaged.
             self.fc2 = nn.Linear(128, self.num_modes)
@@ -401,13 +401,13 @@ class GeneExpressionFlowModel(nn.Module):
 
         self.lower_dim_embedding_perturbation = nn.Sequential(
             nn.Linear(dim_perturbation, 128),
-            nn.Dropout(p=self.prob_dropout_conditionencoder),  # TODO:aknote:tune p
+            nn.Dropout(p=self.prob_dropout_conditionencoder),  # TODO:note:tune p
             nn.ReLU(),
             nn.Linear(128, self.dim_embedding),
         )  
-        # TODO:aknote:IMP: since dim_perturbation is, e.g., 3K on norman, then the first layer has 3K x 128 ~ 300K params.
+        # TODO:note:IMP: since dim_perturbation is, e.g., 3K on norman, then the first layer has 3K x 128 ~ 300K params.
         #    It's usually more than number of cells in a typical dataset.
-        # TODO:aknote:IMP what if Dropout is added here ???  
+        # TODO:note:IMP what if Dropout is added here ???  
 
         self.xavierinit_condition_encoder()
         print(" >>>>>>>>> Xavier init was called for the condition encoder.")
@@ -724,7 +724,7 @@ class GeneExpressionFlowModel(nn.Module):
             gumbel_softmax_output = F.gumbel_softmax(
                 logits,
                 tau=self.temperature,
-                hard=True  # TODO:aknote:IMP during the generation phase no grad is needed --> it can be hard.
+                hard=True  # TODO:note:IMP during the generation phase no grad is needed --> it can be hard.
             )
 
             predicted_means = self.module_H_theta(class_list)  # [N x num_modes * D]

@@ -393,14 +393,14 @@ def main():
     cond_train = get_conditions(data.gene_expression_dataset.adata_train, column_pert, covariates)
     cond_train_csv = os.path.join(
         args.path_output_workspace,
-        f"weights/conditions_{args.str_runname}_akDebug_train.csv"
+        f"weights/conditions_{args.str_runname}_Debug_train.csv"
     )
     cond_train.to_csv(cond_train_csv, index=False)
 
     cond_test = get_conditions(data.gene_expression_dataset.adata_test, column_pert, covariates)
     cond_test_csv = os.path.join(
         args.path_output_workspace,
-        f"weights/conditions_{args.str_runname}_akDebug_test.csv"
+        f"weights/conditions_{args.str_runname}_Debug_test.csv"
     )
     cond_test.to_csv(cond_test_csv, index=False)
 

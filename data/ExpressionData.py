@@ -134,7 +134,7 @@ class GeneExpression(Dataset):
         delta=False,
         device="cpu"
     ):
-        self.condition_keys = condition_keys  # TODO:aknote:added here in case the custom sampler for the DL needs it.
+        self.condition_keys = condition_keys  # TODO:note:added here in case the custom sampler for the DL needs it.
         self.adata = sc.read_h5ad(file_path)
 
 
@@ -159,13 +159,13 @@ class GeneExpression(Dataset):
 
         self.perturbation_key = perturbation_key
         self.control = control
-        self.device = 'cpu' #device  # TODO:aknote: should I uncomment? It remains 'cpu' in the end as well.
+        self.device = 'cpu' #device  # TODO:note: should I uncomment? It remains 'cpu' in the end as well.
         logger.info(
             f"Loaded dataset with {self.adata.n_obs} cells and {self.adata.n_vars} genes."
         )
         logger.info(f"Extracting and preprocessing gene expression data...")
 
-        # TODO:aknote: I commented out this part, because the function `adata_preprocessing` already does it and for the combined (i.e. train+test) anndata. Notabley it will collide with HVG removal, etc.
+        # TODO:note: I commented out this part, because the function `adata_preprocessing` already does it and for the combined (i.e. train+test) anndata. Notabley it will collide with HVG removal, etc.
         ''' 
         self.adata.X = self.adata.layers["counts"].copy()
         logger.info("Normalizing the data...")
@@ -185,7 +185,7 @@ class GeneExpression(Dataset):
             self.adata_train = self.adata.copy()
             self.adata_test = None
         
-        #TODO:aknote:BUG if delta is False, then `self.expression_data` is never assigned.
+        #TODO:note:BUG if delta is False, then `self.expression_data` is never assigned.
         if delta: 
             logger.info(f"Subtracting control mean from the data...")
             if "cell_type" in self.adata.obs.columns:
@@ -202,7 +202,7 @@ class GeneExpression(Dataset):
             adata_aktrain4eval = self.adata_train.copy()  # to be used only for evaluation            
 
             self.dict_celltype_to_ctrlmean_trainingset = {}  
-            # TODO:aknote: so if during evaluation a celltype has been seen during training, the same `ctrl_mean` is added to the generated diff expression vector.
+            # TODO:note: so if during evaluation a celltype has been seen during training, the same `ctrl_mean` is added to the generated diff expression vector.
              
             for cell_type in cell_types:
                 if len(cell_types) > 1:
@@ -219,8 +219,8 @@ class GeneExpression(Dataset):
                     idx_test = np.ones(len(self.adata_test)).astype(bool)
 
                 
-                ctrl_mean = self.adata_train[idx][self.adata_train[idx].obs[perturbation_key] == control].X.mean(axis=0)  # TODO:aknote: if reached an error here, one possibility is that in some splits, for some cell types there might be no control population available.
-                self.expression_data[idx] = self.expression_data[idx] - ctrl_mean  # TODO:aknote: since adata.X is log1p-transformed, this is equivalent to division by control. Is this the intended behaviour ???
+                ctrl_mean = self.adata_train[idx][self.adata_train[idx].obs[perturbation_key] == control].X.mean(axis=0)  # TODO:note: if reached an error here, one possibility is that in some splits, for some cell types there might be no control population available.
+                self.expression_data[idx] = self.expression_data[idx] - ctrl_mean  # TODO:note: since adata.X is log1p-transformed, this is equivalent to division by control. Is this the intended behaviour ???
                 
 
                 adata_aktrain4eval.X[idx] = adata_aktrain4eval.X[idx] - ctrl_mean 
@@ -278,7 +278,7 @@ class GeneExpression(Dataset):
             #PCA(n_components=self.num_pca_components)
             self.pca.fit(self.expression_data)
         
-        self.adata_train.obsm["X_pca"] = self.pca.transform(self.expression_data)  # TODO:aknote: this is to be used to do FM.
+        self.adata_train.obsm["X_pca"] = self.pca.transform(self.expression_data)  # TODO:note: this is to be used to do FM.
         self.adata_train.obsm['delta'] = self.expression_data.copy()
 
         perturbations = self.adata_train.obs[perturbation_key]
@@ -324,7 +324,7 @@ class GeneExpression(Dataset):
         self.perturbation_embeddings = torch.zeros(
             (self.adata_train.X.shape[0], self.max_num_perturbations, size_embedding),
             device=self.device,
-        )  # [N x numPerts x embSize]  #TODO:aknote: maybe not the best efficient way, but OK for now.
+        )  # [N x numPerts x embSize]  #TODO:note: maybe not the best efficient way, but OK for now.
 
         self.mask = torch.zeros(
             (self.adata_train.X.shape[0], self.max_num_perturbations), device=self.device
@@ -345,7 +345,7 @@ class GeneExpression(Dataset):
         self.num_genes = self.expression_data.shape[1]
         self.dim_perturbations = self.perturbation_embeddings.shape[2]
 
-        #TODO:aknote: Since similar stuff are done for both `self.adata_train` and `self.adata_test`, maybe the better ways is to not do it only on `self.adata_train` but instead on the combined anndata object.
+        #TODO:note: Since similar stuff are done for both `self.adata_train` and `self.adata_test`, maybe the better ways is to not do it only on `self.adata_train` but instead on the combined anndata object.
 
         self.condition_dict = dict()  # will contain set of possible values for each of the speicified covariates.
         self.condition_indexes = dict()  # for each of the specified covariates, it specifies how each possible value is mapped to an index.
@@ -354,12 +354,12 @@ class GeneExpression(Dataset):
         if condition_keys is not None:  # e.g. cell types or other covariates.
             for key in condition_keys:
                 try:
-                    self.condition_dict[key] = self.adata_train.obs[key].unique().tolist()  # set of possible values for that condition. TODO:aknote:check I added `.tolist()`
+                    self.condition_dict[key] = self.adata_train.obs[key].unique().tolist()  # set of possible values for that condition. TODO:note:check I added `.tolist()`
                     self.condition_indexes[key] = {
                         c: i for i, c in enumerate(sorted(self.condition_dict[key]))
                     }  # how the values are mapped to indices in that column of adata.obs.
                     self.condition[key] = torch.tensor(
-                        [self.condition_indexes[key][c] for c in self.adata_train.obs[key].tolist()],  # TODO:aknote:check I added `.tolist()`
+                        [self.condition_indexes[key][c] for c in self.adata_train.obs[key].tolist()],  # TODO:note:check I added `.tolist()`
                         dtype=torch.long,
                         device=self.device,
                     )  # [numcells_train]
@@ -370,7 +370,7 @@ class GeneExpression(Dataset):
                     sys.exit(1)
                 
 
-                # TODO:aknote: I modified this part, for the following consideration
+                # TODO:note: I modified this part, for the following consideration
                 #    The indexing in `self.pretrained_embeddings[covarname]` must be consistent with `self.condition_indexes`, while it used to add all values of the covar to `self.pretrained_embeddings`, even some covar-values were discarded form the anndata object.
                 if key in self.adata_train.uns.keys(): #try:
                     covarname = key  # to improve readability
@@ -402,7 +402,7 @@ class GeneExpression(Dataset):
                         for idx in range(len(dict_index_to_covarval.keys()))
                     ])
 
-                    #TODO:aknote: I deleted this line and added the lines above. Old code: self.pretrained_embeddings[key] = self.adata_train.uns[key]
+                    #TODO:note: I deleted this line and added the lines above. Old code: self.pretrained_embeddings[key] = self.adata_train.uns[key]
                     
                 else: #except KeyError:
                     logger.info(
@@ -473,7 +473,7 @@ class GeneExpression(Dataset):
     
     def __len__(self):
         """Returns the number of samples in the dataset."""
-        return self.expression_data.shape[0]  # TODO:aknote: here it's the training split (and not the testing).
+        return self.expression_data.shape[0]  # TODO:note: here it's the training split (and not the testing).
 
     def custom_collate_fn(self, batch):
 
@@ -515,7 +515,7 @@ class GeneExpression(Dataset):
         return expressions, perturbations, mask, conditions, dosages, one_hot_encoded_genes, strIDs_perturbations
     
     def __getitem__(self, idx):
-        if issparse(self.expression_data):  # TODO:aknote: `self.expression_data` seems to be always numpy.ndarray, so not sparse I guess.
+        if issparse(self.expression_data):  # TODO:note: `self.expression_data` seems to be always numpy.ndarray, so not sparse I guess.
             expression = self.expression_data[idx].toarray().ravel()
         else:
             expression = self.expression_data[idx]
@@ -547,8 +547,8 @@ class GeneExpression(Dataset):
             condition_tensordict = TensorDict(
                 dict_condition, batch_size=torch.Size([1]), device=self.device
             )
-            # TODO:aknote: Recall that `self.condition[key]` contains the indices of that condition for all cells (and not the 1-hot-s).
-            # TODO:aknote: shouldn't it be converted to condition embeddings here? It's done later on.
+            # TODO:note: Recall that `self.condition[key]` contains the indices of that condition for all cells (and not the 1-hot-s).
+            # TODO:note: shouldn't it be converted to condition embeddings here? It's done later on.
 
         else:
             condition_tensordict = None

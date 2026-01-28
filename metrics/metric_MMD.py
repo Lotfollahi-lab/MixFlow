@@ -1,7 +1,7 @@
 
 
 """
-Calculates the MMD metric as done by Klein et al: https://github.com/theislab/CellFlow
+Calculates the MMD metric as done in: https://github.com/theislab/CellFlow
 """
 
 import numpy as np
